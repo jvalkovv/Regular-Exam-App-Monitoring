@@ -1,0 +1,39 @@
+groups:
+  - name: Connection is slow
+    rules:
+    - alert: SlowConnection
+      expr: probe_http_duration_seconds{phase="connect"} > 0.0025
+      for: 3s
+      labels:
+        severity: warning
+      annotations:
+        summary: "Slow connection detected"
+        
+  - name: HTTP Status Check
+    rules:
+    - alert: HttpStatusCodeNot200 
+      expr: probe_http_status_code != 200
+      for: 5s
+      labels:
+        severity: critical
+      annotations:
+        summary: "Site down detected"
+  - name: High Latency
+    rules:
+    - alert: HighLatency
+      expr: probe_duration_seconds > 0.5
+      for: 10s
+      labels:
+        severity: critical
+      annotations:
+        summary: "High latency detected"
+
+  - name: Response Time Alert
+    rules:
+    - alert: ResponseTimeTooHigh
+      expr: probe_duration_seconds > 0.1
+      for: 10s
+      labels:
+        severity: warning
+      annotations:
+        summary: "Response time too high"
